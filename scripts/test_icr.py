@@ -22,8 +22,8 @@ core_positions = {
 }
 
 # Move the stored tensors back to the GPU for ICR computation.
-hidden_states = [tuple(x.cuda() for x in h) for h in hidden_states]
-attentions = [tuple(x.cuda() for x in a) for a in attentions]
+hidden_states = [tuple(x.cuda().float()  for x in h) for h in hidden_states]
+attentions = [tuple(x.cuda().float()  for x in a) for a in attentions]
 
 print("\nBuilding ICR object...")
 
