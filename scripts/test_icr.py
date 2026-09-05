@@ -58,3 +58,14 @@ print(icr_scores[0])
 
 print("\nMean selected attention proportion:")
 print(top_p_mean)
+
+layer_averages = [
+    sum(layer_scores) / len(layer_scores)
+    for layer_scores in icr_scores
+]
+
+print("\nProbe feature vector:")
+print(layer_averages)
+
+print("\nFeature count:")
+print(len(layer_averages))
