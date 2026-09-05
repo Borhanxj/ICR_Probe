@@ -40,8 +40,8 @@ print ("ICR object created successfully.")
 
 print("\nComputing ICR score...")
 icr_scores, top_p_mean = icr.compute_icr(
-    top_k=20,
-    top_p=0.1,
+    top_k=5,
+    top_p=None,
     pooling="mean",
     attention_uniform=False,
     hidden_uniform=False,
