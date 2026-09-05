@@ -30,8 +30,31 @@ print("\nBuilding ICR object...")
 icr = ICRScore(
     hidden_states=hidden_states,
     attentions=attentions,
+    skew_threshold=0,
+    entropy_threshold=1e5,
     core_positions=core_positions,
     icr_device=torch.device("cuda"),
 )
 
 print ("ICR object created successfully.")
+
+print("\nComputing ICR score...")
+icr_scores, top_p_mean = icr.compute_icr(
+    top_k=20,
+    top_p=0.1,
+    pooling="mean",
+    attention_uniform=False,
+    hidden_uniform=False,
+    use_induction_head=True,
+)
+
+print("\nICR computation completed.")
+
+print("\nNumber of layers:", len(icr_scores))
+print("Number of generated tokens:", len(icr_scores[0]))
+
+print("\nICR scores for layer 1:")
+print(icr_scores[0])
+
+print("\nMean selected attention proportion:")
+print(top_p_mean)
