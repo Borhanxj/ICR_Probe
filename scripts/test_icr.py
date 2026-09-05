@@ -2,7 +2,7 @@ import torch
 from src.icr_score import ICRScore
 
 # Load the internal states we saved during generation.
-data = torch.load("artifacts/qwer_internal_states.pt", map_location="cpu", with_weights=False)
+data = torch.load("artifacts/qwen_internal_states.pt", map_location="cpu", with_weights=False)
 
 hidden_states = data["hidden_states"]
 attentions = data["attentions"]
