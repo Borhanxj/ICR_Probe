@@ -16,7 +16,7 @@ model = AutoModelForCausalLM.from_pretrained(
 
 model.eval()
 
-prompt = "The capital of France is"
+prompt = "Harvard is one of the most"
 inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
 
 # These will store:
