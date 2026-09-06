@@ -57,8 +57,8 @@ print("Already collected:", len(existing_ids))
 
 
 dataset = load_dataset(
-    "trivia_qa",
-    "rc",
+    "mandarjoshi/trivia_qa",
+    "rc.nocontext",
     split=f"validation[:{TOTAL_EXAMPLES}]",
 )
 
