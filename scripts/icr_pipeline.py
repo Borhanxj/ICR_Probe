@@ -12,7 +12,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 print("Loading model...")
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
-    dtype=torch.bfloat16,
+    dtype=torch.float16,
     attn_implementation="eager",
 ).to("cuda")
 
@@ -39,7 +39,6 @@ def extract_icr_features(prompt, max_new_tokens=10):
     inputs = tokenizer.apply_chat_template(
         messages,
         add_generation_prompt=True,
-        enable_thinking=False,
         tokenize=True,
         return_dict=True,
         return_tensors="pt",
