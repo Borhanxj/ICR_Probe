@@ -3,9 +3,9 @@ from datasets import load_dataset
 print("Loading TriviaQA...")
 
 dataset = load_dataset(
-    "trivia_qa",
-    "rc",
-    split="validation[:5]"
+    "mandarjoshi/trivia_qa",
+    "rc.nocontext",
+    split="validation"
 )
 
 for i, example in enumerate(dataset):
