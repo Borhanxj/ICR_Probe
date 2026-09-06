@@ -8,10 +8,10 @@ from sklearn.metrics import roc_auc_score, accuracy_score
 from src.utils import ICRProbe
 
 
-PROMPT_A_FILE = "artifacts/triviaqa_icr_100_labeled.jsonl"
-PROMPT_B_FILE = "artifacts/triviaqa_icr_100_prompt_c_labeled.jsonl"
+PROMPT_A_FILE = "artifacts/triviaqa_icr_100_em_labeled.jsonl"
+PROMPT_B_FILE = "artifacts/triviaqa_icr_100_prompt_b_em_labeled.jsonl"
 
-MODEL_FILE = "artifacts/icr_probe_test/model.pth"
+MODEL_FILE = "artifacts/icr_probe_test_em/model.pth"
 
 
 # --------------------------------------------------
