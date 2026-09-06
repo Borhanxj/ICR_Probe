@@ -6,8 +6,8 @@ from scripts.icr_pipeline import extract_icr_features
 print("Loading 5 TriviaQA examples...")
 
 dataset = load_dataset(
-    "trivia_qa",
-    "rc",
+    "mandarjoshi/trivia_qa",
+    "rc.nocontext",
     split="validation[:5]"
 )
 
