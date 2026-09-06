@@ -1,11 +1,12 @@
 import json
 import random
+from types import SimpleNamespace
 
 import numpy as np
 import torch
+from torch.utils.data import TensorDataset, DataLoader
 
 from src.icr_probe import ICRProbeTrainer
-from src.utils import ICRProbeConfig
 
 
 DATA_FILE = "artifacts/triviaqa_icr_500_em_labeled.jsonl"
@@ -16,7 +17,7 @@ SEED = 42
 
 
 # --------------------------------------------------
-# Reproducibility
+# 1. Reproducibility
 # --------------------------------------------------
 
 random.seed(SEED)
@@ -28,11 +29,15 @@ if torch.cuda.is_available():
 
 
 # --------------------------------------------------
-# Load data
+# 2. Load dataset and fixed split
 # --------------------------------------------------
 
 with open(DATA_FILE, "r", encoding="utf-8") as f:
-    records = [json.loads(line) for line in f if line.strip()]
+    records = [
+        json.loads(line)
+        for line in f
+        if line.strip()
+    ]
 
 with open(SPLIT_FILE, "r", encoding="utf-8") as f:
     split = json.load(f)
@@ -43,6 +48,10 @@ record_by_id = {
     for record in records
 }
 
+
+# --------------------------------------------------
+# 3. Build features/labels for specific IDs
+# --------------------------------------------------
 
 def build_xy(ids):
     X = np.array(
@@ -62,44 +71,107 @@ X_train, y_train = build_xy(split["train_ids"])
 X_val, y_val = build_xy(split["val_ids"])
 
 
-print("Train shape:", X_train.shape)
+print("Training shape:", X_train.shape)
 print("Validation shape:", X_val.shape)
 
+print(
+    "Training labels:",
+    int((y_train == 0).sum()),
+    "correct /",
+    int((y_train == 1).sum()),
+    "incorrect",
+)
+
+print(
+    "Validation labels:",
+    int((y_val == 0).sum()),
+    "correct /",
+    int((y_val == 1).sum()),
+    "incorrect",
+)
+
 
 # --------------------------------------------------
-# Probe configuration
+# 4. Safety checks
 # --------------------------------------------------
 
-config = ICRProbeConfig(
-    input_dim=X_train.shape[1],
-    lr=1e-3,
-    weight_decay=1e-4,
+if np.isnan(X_train).any():
+    raise ValueError("Training features contain NaN values!")
+
+if np.isnan(X_val).any():
+    raise ValueError("Validation features contain NaN values!")
+
+
+# --------------------------------------------------
+# 5. PyTorch datasets/loaders
+# --------------------------------------------------
+
+train_dataset = TensorDataset(
+    torch.tensor(X_train, dtype=torch.float32),
+    torch.tensor(y_train, dtype=torch.float32),
+)
+
+val_dataset = TensorDataset(
+    torch.tensor(X_val, dtype=torch.float32),
+    torch.tensor(y_val, dtype=torch.float32),
+)
+
+
+train_loader = DataLoader(
+    train_dataset,
     batch_size=16,
-    epochs=50,
+    shuffle=True,
+)
+
+val_loader = DataLoader(
+    val_dataset,
+    batch_size=16,
+    shuffle=False,
+)
+
+
+# --------------------------------------------------
+# 6. Configuration
+# --------------------------------------------------
+
+config = SimpleNamespace(
+    learning_rate=1e-3,
+    weight_decay=1e-4,
+
     lr_factor=0.5,
     lr_patience=5,
+
+    num_epochs=50,
+
     halu_threshold=0.5,
+
     save_dir=MODEL_DIR,
 )
 
 
-trainer = ICRProbeTrainer(config)
-
-
 # --------------------------------------------------
-# Train
+# 7. Create and initialize probe
 # --------------------------------------------------
 
-trainer.train(
-    X_train,
-    y_train,
-    X_val,
-    y_val,
+trainer = ICRProbeTrainer(
+    model=None,
+    train_loader=train_loader,
+    val_loader=val_loader,
+    config=config,
 )
 
+trainer.setup_model()
+
 
 # --------------------------------------------------
-# Reload best validation checkpoint
+# 8. Train
+# --------------------------------------------------
+
+trainer.train()
+
+
+# --------------------------------------------------
+# 9. Reload best validation checkpoint
 # --------------------------------------------------
 
 trainer.model.load_state_dict(
@@ -112,18 +184,15 @@ trainer.model.load_state_dict(
 
 
 # --------------------------------------------------
-# Final validation metrics
+# 10. Evaluate on validation set only
 # --------------------------------------------------
 
-results = trainer.evaluate(
-    X_val,
-    y_val,
-)
+metrics = trainer._validate_epoch()
 
 
 print("\n==============================")
 print("FINAL VALIDATION RESULTS")
 print("==============================")
 
-for key, value in results.items():
-    print(f"{key}: {value}")
+for name, value in metrics.items():
+    print(f"{name}: {value:.4f}")
