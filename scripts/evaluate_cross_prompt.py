@@ -1,5 +1,4 @@
 import json
-from random import random
 
 import numpy as np
 import torch
@@ -41,12 +40,6 @@ prompt_b = load_data(PROMPT_B_FILE)
 ids = np.array([record["id"] for record in prompt_a])
 labels_a = np.array([record["label"] for record in prompt_a])
 
-random.seed(42)
-np.random.seed(42)
-torch.manual_seed(42)
-
-if torch.cuda.is_available():
-    torch.cuda.manual_seed_all(42)
 
 train_ids, val_ids = train_test_split(
     ids,
