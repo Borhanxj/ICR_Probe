@@ -9,8 +9,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from src.icr_probe import ICRProbeTrainer
 
 
-DATA_FILE = "artifacts/triviaqa_icr_100_labeled.jsonl"
-
+DATA_FILE = "artifacts/triviaqa_icr_100_em_labeled.jsonl"
 
 # --------------------------------------------------
 # 1. Load features and labels
@@ -104,7 +103,7 @@ config = SimpleNamespace(
 
     halu_threshold=0.5,
 
-    save_dir="artifacts/icr_probe_test",
+    save_dir="artifacts/icr_probe_test_em",
 )
 
 
