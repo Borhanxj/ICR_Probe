@@ -9,7 +9,7 @@ from src.utils import ICRProbe
 
 
 PROMPT_A_FILE = "artifacts/triviaqa_icr_100_em_labeled.jsonl"
-PROMPT_B_FILE = "artifacts/triviaqa_icr_100_prompt_c_em_labeled.jsonl"
+PROMPT_B_FILE = "artifacts/triviaqa_icr_100_prompt_d_em_labeled.jsonl"
 MODEL_FILE = "artifacts/icr_probe_test_em/model.pth"
 
 
