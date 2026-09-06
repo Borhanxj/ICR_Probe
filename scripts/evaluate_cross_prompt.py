@@ -81,6 +81,19 @@ y_b = np.array(
     [b_by_id[i]["label"] for i in val_ids],
     dtype=np.float32,
 )
+# Keep only questions whose correctness did not change
+# between Prompt A and Prompt B.
+stable_mask = y_a == y_b
+
+X_a_stable = X_a[stable_mask]
+X_b_stable = X_b[stable_mask]
+
+y_stable = y_a[stable_mask]
+
+print(
+    "Stable-label validation examples:",
+    stable_mask.sum()
+)
 
 
 # --------------------------------------------------
@@ -156,6 +169,29 @@ pred_b = (scores_b >= 0.5).astype(int)
 
 acc_a = accuracy_score(y_a, pred_a)
 acc_b = accuracy_score(y_b, pred_b)
+
+scores_a_stable = predict_scores(X_a_stable)
+scores_b_stable = predict_scores(X_b_stable)
+
+auc_a_stable = roc_auc_score(
+    y_stable,
+    scores_a_stable
+)
+
+auc_b_stable = roc_auc_score(
+    y_stable,
+    scores_b_stable
+)
+
+print("\nSTABLE-LABEL RESULTS")
+print("====================")
+print(f"Examples: {len(y_stable)}")
+print(f"Prompt A AUROC: {auc_a_stable:.4f}")
+print(f"Prompt B AUROC: {auc_b_stable:.4f}")
+print(
+    f"Difference: "
+    f"{auc_b_stable - auc_a_stable:+.4f}"
+)
 
 
 # --------------------------------------------------
