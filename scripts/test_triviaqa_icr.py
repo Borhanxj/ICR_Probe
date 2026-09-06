@@ -8,7 +8,7 @@ print("Loading 5 TriviaQA examples...")
 dataset = load_dataset(
     "mandarjoshi/trivia_qa",
     "rc.nocontext",
-    split="validation[:50]"
+    split="validation[:10]"
 )
 
 

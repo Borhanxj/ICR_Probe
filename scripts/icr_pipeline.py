@@ -12,7 +12,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 print("Loading model...")
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
-    dtype=torch.float16,
+    dtype=torch.bfloat16,
     attn_implementation="eager",
 ).to("cuda")
 
