@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from src.icr_score import ICRScore
 
 
-MODEL_NAME = "Qwen/Qwen2.5-7B-Instruct"
+MODEL_NAME = "Qwen/Qwen2.5-14B-Instruct"
 
 print("Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
