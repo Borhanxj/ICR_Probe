@@ -18,8 +18,12 @@ for i, example in enumerate(dataset):
     correct_answer = example["answer"]["value"]
 
     # Use one fixed prompt format for now.
-    prompt = f"Question: {question}\nAnswer:"
-
+    prompt = (
+        "Answer the following question with only the short answer. "
+        "Do not explain.\n"
+        f"Question: {question}\n"
+        "Answer:"
+    )
     print(f"\n{'=' * 60}")
     print(f"Example {i + 1}")
     print("Question:", question)
@@ -27,7 +31,7 @@ for i, example in enumerate(dataset):
 
     generated_answer, features = extract_icr_features(
         prompt,
-        max_new_tokens=10
+        max_new_tokens=20
     )
 
     print("Model answer:", generated_answer)
