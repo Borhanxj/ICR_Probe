@@ -16,10 +16,17 @@ FILES = {
         "artifacts/triviaqa_icr_100_prompt_c.jsonl",
         "artifacts/triviaqa_icr_100_prompt_c_em_labeled.jsonl",
     ),
+    "D": (
+    "artifacts/triviaqa_icr_100_prompt_d.jsonl",
+    "artifacts/triviaqa_icr_100_prompt_d_em_labeled.jsonl",
+    ),
 }
 
 
 def normalize_answer(text):
+    if text is None:
+        return ""
+
     text = text.lower()
     text = text.replace("_", " ")
 
