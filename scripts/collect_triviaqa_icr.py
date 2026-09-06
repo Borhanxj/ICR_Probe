@@ -11,8 +11,8 @@ OUTPUT_FILE = "artifacts/triviaqa_icr_100.jsonl"
 print(f"Loading {NUM_EXAMPLES} TriviaQA examples...")
 
 dataset = load_dataset(
-    "trivia_qa",
-    "rc",
+    "mandarjoshi/trivia_qa",
+    "rc.nocontext",
     split=f"validation[:{NUM_EXAMPLES}]"
 )
 
