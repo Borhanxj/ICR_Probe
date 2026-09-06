@@ -30,8 +30,8 @@ def extract_final_answer(text):
 
 
 dataset = load_dataset(
-    "trivia_qa",
-    "rc",
+    "mandarjoshi/trivia_qa",
+    "rc.nocontext",
     split=f"validation[:{NUM_EXAMPLES}]",
 )
 
