@@ -33,9 +33,17 @@ def extract_icr_features(prompt, max_new_tokens=10):
        - one ICR value per transformer layer
     """
 
-    inputs = tokenizer(
-        prompt,
-        return_tensors="pt"
+    messages = [
+        {"role": "user", "content": prompt}
+    ]
+
+    inputs = tokenizer.apply_chat_template(
+        messages,
+        add_generation_prompt=True,
+        enable_thinking=False,
+        tokenize=True,
+        return_dict=True,
+        return_tensors="pt",
     ).to("cuda")
 
     hidden_states = []
