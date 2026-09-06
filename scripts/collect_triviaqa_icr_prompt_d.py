@@ -4,8 +4,8 @@ from datasets import load_dataset
 from scripts.icr_pipeline import extract_icr_features
 
 
-NUM_EXAMPLES = 5
-OUTPUT_FILE = "artifacts/triviaqa_icr_prompt_d_test.jsonl"
+NUM_EXAMPLES = 100
+OUTPUT_FILE = "artifacts/triviaqa_icr_100_prompt_d.jsonl"
 
 
 def extract_final_answer(text):
