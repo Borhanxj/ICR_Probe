@@ -30,6 +30,17 @@ def load_data(path):
 prompt_a = load_data(PROMPT_A_FILE)
 prompt_b = load_data(PROMPT_B_FILE)
 
+A_LABEL_OVERRIDES = {
+    8: 0,
+    98: 0,
+}
+
+D_LABEL_OVERRIDES = {
+    4: 0,
+    8: 0,
+    87: 0,
+    98: 0,
+}
 
 # --------------------------------------------------
 # 2. Reconstruct the EXACT validation split
@@ -59,6 +70,11 @@ print(sorted(val_ids.tolist()))
 a_by_id = {record["id"]: record for record in prompt_a}
 b_by_id = {record["id"]: record for record in prompt_b}
 
+for idx, label in A_LABEL_OVERRIDES.items():
+    a_by_id[idx]["label"] = label
+
+for idx, label in D_LABEL_OVERRIDES.items():
+    b_by_id[idx]["label"] = label
 
 X_a = np.array(
     [a_by_id[i]["features"] for i in val_ids],
