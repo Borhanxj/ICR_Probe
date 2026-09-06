@@ -46,16 +46,15 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
 
         prompt = (
             "Answer the following trivia question. "
-            "Think through the problem step by step before answering. "
-            "At the end, you MUST write your short final answer using exactly "
-            "this format:\n"
+            "Reason step by step using at most 3 short steps. "
+            "Then give your short final answer using exactly this format:\n"
             "Final answer: <answer>\n\n"
             f"Question: {question}"
         )
 
         full_output, features = extract_icr_features(
             prompt,
-            max_new_tokens=96,
+            max_new_tokens=128,
         )
 
         final_answer = extract_final_answer(full_output)
