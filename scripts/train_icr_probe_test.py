@@ -3,6 +3,7 @@ from types import SimpleNamespace
 
 import numpy as np
 import torch
+import random
 from sklearn.model_selection import train_test_split
 from torch.utils.data import TensorDataset, DataLoader
 
@@ -10,6 +11,7 @@ from src.icr_probe import ICRProbeTrainer
 
 
 DATA_FILE = "artifacts/triviaqa_icr_100_em_labeled.jsonl"
+MODEL_DIR = "artifacts/icr_probe_test_em"
 
 # --------------------------------------------------
 # 1. Load features and labels
@@ -46,7 +48,13 @@ if np.isnan(X).any():
 # --------------------------------------------------
 # 3. Split into training and validation data
 # --------------------------------------------------
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
 
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(42)
+    
 X_train, X_val, y_train, y_val = train_test_split(
     X,
     y,
@@ -103,7 +111,7 @@ config = SimpleNamespace(
 
     halu_threshold=0.5,
 
-    save_dir="artifacts/icr_probe_test_em",
+    save_dir=MODEL_DIR,
 )
 
 
@@ -134,7 +142,7 @@ trainer.train()
 
 trainer.model.load_state_dict(
     torch.load(
-        "artifacts/icr_probe_test/model.pth",
+        f"{MODEL_DIR}/model.pth",
         map_location=trainer.device,
         weights_only=True,
     )
