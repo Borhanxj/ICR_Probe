@@ -2,8 +2,8 @@ import json
 import re
 
 
-INPUT_FILE = "artifacts/triviaqa_icr_100.jsonl"
-OUTPUT_FILE = "artifacts/triviaqa_icr_100_labeled.jsonl"
+INPUT_FILE = "artifacts/triviaqa_icr_100_prompt_b.jsonl"
+OUTPUT_FILE = "artifacts/triviaqa_icr_100_prompt_b_labeled.jsonl"
 
 
 def normalize(text):
